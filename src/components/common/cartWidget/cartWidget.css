@@ -1,0 +1,24 @@
+/* Estilo para el carrito */
+nav ul li.cart {
+  position: relative;
+  margin-top: -5px;
+}
+
+.cart-icon {
+  font-size: 1.4rem;
+}
+
+.cart-count {
+  position: absolute;
+  top: -6px;
+  right: -5px;
+  background-color: red;
+  color: white;
+  font-size: 0.9rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
