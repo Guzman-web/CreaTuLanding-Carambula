@@ -4,7 +4,7 @@ function App() {
   return (
     <>
       <NavBar />
-      <ItemListContainer mensaje="BIENVENIDO" />
+      <ItemListContainer mensaje="BIENVENIDOS" />
     </>
   );
 }
