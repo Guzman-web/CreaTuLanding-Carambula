@@ -1,12 +1,37 @@
 import "./itemListContainer.css";
 import { ProductCard } from "../../common/productCard/ProductCard";
-export const ItemListContainer = ({ mensaje }) => {
+import { products } from "../../../products";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+export const ItemListContainer = () => {
+  const [items, setItems] = useState([]);
+  const { name } = useParams();
+
+  useEffect(() => {
+    const getProducts = new Promise((resolve, reject) => {
+      let isAdmin = true;
+      if (isAdmin) {
+        resolve(
+          name
+            ? products.filter((elemento) => elemento.category === name)
+            : products
+        );
+      } else {
+        reject({ message: "algo salio mal", status: 400 });
+      }
+    });
+
+    getProducts
+      .then((res) => setItems(res))
+      .catch((error) => console.log(error));
+  }, [name]);
+
   return (
-    <>
-      <h2>{mensaje}</h2>
-      <div className="card">
-        <ProductCard />
-      </div>
-    </>
+    <section>
+      <h2>Mis productos</h2>
+      {items.map((item) => {
+        return <ProductCard key={item.id} item={item} />;
+      })}
+    </section>
   );
 };

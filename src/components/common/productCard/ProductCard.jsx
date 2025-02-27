@@ -1,15 +1,23 @@
 import "./productCard.css";
-
-export const ProductCard = () => {
+import { Link } from "react-router";
+export const ProductCard = ({ item }) => {
   return (
     <>
-      <h1>Mapache</h1>
-      <img src="../src/logo.png" className="imagenesProductos"></img>
-      <p class="price">$12.99</p>
-      <p>Descripcion del producto</p>
-      <p>
-        <button>Add to Cart</button>
-      </p>
+      <div className="container-card">
+        <div className="card">
+          <img
+            src={item.imageUrl}
+            className="imagenesProductos"
+            alt={item.title}
+          />
+          <p className="price">${item.price}</p>
+          <p>{item.title}</p>
+          <p>
+            <Link to={`/itemDetail/${item.id}`}>Ver detalle</Link>
+          </p>
+        </div>
+        {/* Repite la estructura para cada producto */}
+      </div>
     </>
   );
 };
