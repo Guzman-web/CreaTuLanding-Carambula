@@ -6,6 +6,7 @@ export const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
+      id: Date.now(),
       role: "assistant",
       content: "¡Hola! Soy tu asistente virtual. ¿En qué puedo ayudarte hoy?"
     }
@@ -34,14 +35,14 @@ export const ChatWidget = () => {
     // Add user message to chat
     const newMessages = [
       ...messages,
-      { role: "user", content: userMessage }
+      { id: Date.now(), role: "user", content: userMessage }
     ];
     setMessages(newMessages);
     setIsLoading(true);
 
     try {
-      // Get conversation history for Claude (exclude the welcome message)
-      const conversationHistory = newMessages
+      // Get conversation history for Claude (exclude the welcome message and current user message)
+      const conversationHistory = messages
         .slice(1) // Skip the initial welcome message
         .map(msg => ({
           role: msg.role,
@@ -49,18 +50,18 @@ export const ChatWidget = () => {
         }));
 
       // Get Claude's response
-      const response = await sendMessageToClaude(userMessage, conversationHistory.slice(0, -1));
+      const response = await sendMessageToClaude(userMessage, conversationHistory);
 
       // Add Claude's response to chat
       setMessages([
         ...newMessages,
-        { role: "assistant", content: response }
+        { id: Date.now() + 1, role: "assistant", content: response }
       ]);
     } catch (error) {
       console.error("Error sending message:", error);
       setMessages([
         ...newMessages,
-        { role: "assistant", content: "Lo siento, hubo un error. Por favor, intenta de nuevo." }
+        { id: Date.now() + 2, role: "assistant", content: "Lo siento, hubo un error. Por favor, intenta de nuevo." }
       ]);
     } finally {
       setIsLoading(false);
@@ -91,9 +92,9 @@ export const ChatWidget = () => {
           </div>
 
           <div className="chat-messages">
-            {messages.map((message, index) => (
+            {messages.map((message) => (
               <div 
-                key={index} 
+                key={message.id} 
                 className={`message ${message.role === "user" ? "user-message" : "assistant-message"}`}
               >
                 <div className="message-content">
